@@ -1,2 +1,3 @@
 # TICK
-Repository for project for the Architecture of large projects in bioinformatics course
+Repository for project for the "Architecture of large projects in bioinformatics".
+We would like to create a tool for analysis sequences and structure of potential pathogenes and parasites of ticks. Our software will be using BLAST and DIAMOND to align sequences to records from our local database. Our aim is to create a user-friendly interface and provide some statisticks from analysis. We also want to create a models presenting structure of provided sequences.
