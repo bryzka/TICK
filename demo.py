@@ -21,7 +21,8 @@ def get_orgs(path: str) -> List[str]:
 if __name__ == '__main__':
     parser = ArgumentParser()
     parser.add_argument("input_file", help="Fasta file containing sequences that we want to check.")
-    parser.add_argument("--config_file", '-c', '-config', default="config", help="Path to config file.")
+    parser.add_argument("--config_file", '-c', '-config', default="config",
+                        help="Path to config file. DEFAULT: ./config")
     parser.add_argument("--email", help="email for blasting purposes")
 
     args = parser.parse_args()
