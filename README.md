@@ -8,7 +8,7 @@ it's highly simplified version of our pipeline, currently using only NCBI BLAST,
 and doesn't have the possibility of using local blast instance and local database. 
 
 ## Work plan
- -[x] ~~Create demo~~
+- [x] ~~Create demo~~
 - [ ] Possibility of using local blast and database
   - [ ] Create tick's pathogens list
   - [ ] Create database out of tick's pathogens proteomes
