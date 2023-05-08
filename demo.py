@@ -37,7 +37,7 @@ if __name__ == '__main__':
 
     orgs = get_orgs(req["orgs"])
     fasta = SeqIO.read(args.input_file, "fasta")
-    blast_ret = blast.qblast('blastn', 'nt', fasta, entrez_query=", ".join(orgs))
+    blast_ret = blast.qblast('blastn', 'nt', fasta, entrez_query=" OR ".join(orgs))
     blast_ret = NCBIXML.parse(blast_ret)
     for record in blast_ret:
         print("Record:")
@@ -45,7 +45,9 @@ if __name__ == '__main__':
             for hsp in alignment.hsps:
                 print("***Alignment***")
                 print(f"Title: {alignment.title}")
-                print(f"Seq: {hsp.sbjct}")
+                print(f"{hsp.query}")
+                print(f"{hsp.match}")
+                print(f"{hsp.sbjct}")
                 print()
     print(blast_ret)
 
