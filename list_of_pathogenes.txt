@@ -1,0 +1,100 @@
+Bacteria: 
+Anaplasma bovis
+Anaplasma capra
+Anaplasma centrale
+Anaplasma marginale
+Anaplasma odocoilei
+Anaplasma ovis
+Anaplasma phagocytophilum 
+Anaplasma platys
+Bartonella henselae
+Bartonella vinsonii
+Borrelia afzelii
+Borrelia burgdorferi
+Borrelia duttonii
+Borrelia hermsii
+Borrelia garinii 
+Borrelia lonestari
+Borrelia mayonii
+Borrelia miyamotoi
+Borrelia parkeri
+Borrelia recurrentis
+Coxiella burnetii 
+Ehrlichia canis
+Ehrlichia chaffeensis
+Ehrlichia ewingii
+Ehrlichia muris
+Ehrlichia ovina
+Ehrlichia ruminantium 
+Francisella tularensis 
+Listeria monocytogenes 
+Ca. Neoehrlichia mikurensis
+Rickettsia africae
+Rickettsia akari
+Rickettsia amblyommatis
+Rickettsia asemboensis
+Rickettsia bellii
+Ca.Rickettsia colombianens
+Rickettsia conorii
+Rickettsia felis
+Rickettsia helvetica
+Rickettsia massiliae
+Ca. “Rickettsia nicoyana”
+Rickettsia parkeri
+Rickettsia philipii
+Rickettsia rhipicephali
+Rickettsia rickettsii
+Rickettsia sibirica
+Rickettsia slovaca
+Rickettsia species 364D
+
+Viruses:
+African swine fever virus(ASFV)
+Alongshan virus
+Bhanja virus
+Bourbon virus
+Colorado tick fever virus (CTFV)
+Crimean–Congo hemorrhagic fever virus (CCHFV)
+Dhori virus (DHOV)
+Eyach virus (EYAV)
+Heartland virus
+Hugues Virus
+Kemerovo Virus
+Kyasanur Forest disease virus (KFDV)
+Louping-ill virus (LIV) 
+Omsk hemorrhagic fever virus (OHFV)
+Powassan encephalitis virus (POWV)
+Severe fever with thrombocytopenia syndrome virus (SFTSV)
+Thogoto virus (THOV)
+Tick-borne encephalitis virus (TBEV) 
+Uukuniemi virus (UUKV)
+
+Parasites:
+Babesia bigemina
+Babesia bovis
+Babesia caballi
+Babesia canis
+Babesia capreoli
+Babesia divergens
+Babesia duncani
+Babesia gibsoni
+Babesia leo
+Babesia microti
+Babesia motasi
+Babesia odocoilei
+Babesia ovis
+Babesia rossi
+Babesia venatorum
+Babesia vogeli
+Babesia vulpis
+Cytauxzoon felis
+Hepatozoon canis
+Theileria bicornis
+Theileria buffeli
+Theileria equi
+Theileria mutans
+Theileria orientalis
+Theileria parva
+Theileria separata
+Theileria taurotragi
+Theileria velifera 
