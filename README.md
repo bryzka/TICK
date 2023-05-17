@@ -10,8 +10,8 @@ and doesn't have the possibility of using local blast instance and local databas
 ## Work plan
 - [x] ~~Create demo~~
 - [ ] Possibility of using local blast and database
-  - [x] Create tick's pathogens list
-  - [x] Create database out of tick's pathogens genomes
+  - [x] ~~Create tick's pathogens list
+  - [x] ~~Create database out of tick's pathogens genomes
 - [ ] Elongation of the pipeline 
   - [ ] Decide what information we need about tick's pathogen sequences
     - Structure?
