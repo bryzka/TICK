@@ -1,27 +1,51 @@
 # Import the necessary libraries
+import argparse
 import tkinter as tk
+
+import numpy as np
 from PIL import Image, ImageTk
 from Bio.Blast.Applications import NcbiblastnCommandline
 from Bio.Blast import NCBIXML
 import subprocess
 
-# Run makeblastdb command to create a database for BLAST
-command = "makeblastdb -in local_database.fasta -dbtype nucl"
-subprocess.run(command, shell=True)
+from matplotlib.figure import Figure
+
+from config import config
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--createdb', action='store_true', default=False, help='Whether the database should be created')
+
+args = parser.parse_args()
+
+# Parse config file
+paths, opt = config('config')
+
+if args.createdb:
+    # Run makeblastdb command to create a database for BLAST
+    command = f"{paths['BLAST']}/makeblastdb -in {paths['DATABASE_PATH']} -dbtype nucl"
+    subprocess.run(command, shell=True)
 
 # Specify the path to your local database
-DATABASE_PATH = "local_database.fasta" 
+DATABASE_PATH = paths['DATABASE_PATH']
+
 
 # Function to run BLAST on a given sequence against the local database
 def blast_sequence(sequence):
-    blastn_cline = NcbiblastnCommandline(query=sequence, db=DATABASE_PATH, outfmt=5, out="blast_results.xml")
+    blastn_cline = NcbiblastnCommandline(cmd=paths['BLAST'] + '/blastn', query=sequence, db=DATABASE_PATH, outfmt=5,
+                                         out="blast_results.xml")
     stdout, stderr = blastn_cline()
     result_handle = open("blast_results.xml")
     blast_record = NCBIXML.read(result_handle)
     return blast_record
 
+
+min_hsp = (float('inf'), None)
+
+
 # Function to execute the BLAST run and display results
 def run_blast():
+    global min_hsp
     # Get the sequence from the entry box
     sequence = seq_entry.get()
     # Run BLAST with the sequence
@@ -29,6 +53,8 @@ def run_blast():
     # Display results
     for alignment in blast_record.alignments:
         for hsp in alignment.hsps:
+            if hsp.expect <= min_hsp[0]:
+                min_hsp = (hsp.expect, hsp)
             results_text.insert(tk.END, f"****Alignment****\n")
             results_text.insert(tk.END, f"sequence: {alignment.title}\n")
             results_text.insert(tk.END, f"length: {alignment.length}\n")
@@ -37,11 +63,56 @@ def run_blast():
             results_text.insert(tk.END, hsp.match[0:75] + "...\n")
             results_text.insert(tk.END, hsp.sbjct[0:75] + "...\n")
 
+
+def _delta(x, y):
+    return 0 if x == y else 1
+
+
+def _M(seq1, seq2, i, j, k):
+    return sum(_delta(x, y) for x, y in zip(seq1[i:i + k], seq2[j:j + k]))
+
+
+def _makeMatrix(seq1, seq2, k):
+    n = len(seq1)
+    m = len(seq2)
+    return [[_M(seq1, seq2, i, j, k) for j in range(m - k + 1)] for i in range(n - k + 1)]
+
+
+def plot():
+    # the figure that will contain the plot
+    fig = Figure(figsize=(5, 5),
+                 dpi=100)
+    hsp = min_hsp[1]
+    print(min_hsp)
+    if hsp:
+        query = hsp.query
+        sbjct = hsp.sbjct
+
+        # list of squares
+        y = np.array(_makeMatrix(query, sbjct, 3))
+        print(len(query), len(sbjct))
+        # adding the subplot
+        plot1 = fig.add_subplot(111)
+
+        # plotting the graph
+        print(y)
+        plot1.imshow(y)
+
+    # creating the Tkinter canvas
+    # containing the Matplotlib figure
+    canvas = FigureCanvasTkAgg(fig,
+                               master=Tick)
+    canvas.draw()
+
+    # placing the canvas on the Tkinter window
+    canvas.get_tk_widget().grid(column=1, row=0)
+
+
 # Create a Tkinter window
 Tick = tk.Tk()
 
 # Load an image and display it
-image1 = Image.open("TICK_logo.jpg")
+image1 = Image.open("TICK_logo.png")
 test = ImageTk.PhotoImage(image1)
 label1 = tk.Label(image=test)
 label1.image = test
@@ -60,6 +131,10 @@ seq_entry.grid(column=1, row=1, sticky=tk.E)
 # Create "Run BLAST" button
 run_button = tk.Button(mainframe, text="Run BLAST", command=run_blast)
 run_button.grid(column=0, row=3, columnspan=3)
+
+# Create "Plot" button
+run_button = tk.Button(mainframe, text="Dotplot", command=plot)
+run_button.grid(column=0, row=7, columnspan=3)
 
 # Create a text box for displaying BLAST results
 results_text = tk.Text(mainframe, height=10, width=50, bg="gray")

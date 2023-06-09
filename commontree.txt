@@ -1,0 +1,156 @@
+Viruses
++-Orthornavirae
+| +-Negarnaviricota
+| | +-Insthoviricetes
+| | | \-Articulavirales
+| | |   \-Orthomyxoviridae
+| | |     \-Thogotovirus
+| | |       \-Thogotovirus bourbonense
+| | |         \-Bourbon virus
+| | \-Ellioviricetes
+| |   \-Bunyavirales
+| |     \-Phenuiviridae
+| |       \-Bandavirus
+| |         +-Heartland bandavirus
+| |         | \-Heartland virus
+| |         \-Bhanja bandavirus
+| |           \-Bhanja virus
+| +-Duplornaviricota
+| | \-Resentoviricetes
+| |   \-Reovirales
+| |     \-Sedoreoviridae
+| |       \-Orbivirus
+| |         \-Great Island virus
+| |           \-Kemerovo virus
+| \-Kitrinoviricota
+|   \-Flasuviricetes
+|     \-Amarillovirales
+|       \-Flaviviridae
+|         +-Alongshan virus
+|         \-Flavivirus
+|           \-Tick-borne encephalitis virus
+\-Bamfordvirae
+  \-Nucleocytoviricota
+    \-Pokkesviricetes
+      \-Asfuvirales
+        \-Asfarviridae
+          \-Asfivirus
+            \-African swine fever virus
+-----------------------------------
+Apicomplexa
++-Conoidasida
+| \-Eucoccidiorida
+|   \-Hepatozoidae
+|     \-Hepatozoon
+|       \-Hepatozoon canis
+\-Aconoidasida
+  \-Piroplasmida
+    +-Theileriidae
+    | +-Cytauxzoon
+    | | \-Cytauxzoon felis
+    | \-Theileria
+    |   +-Theileria separata
+    |   +-Theileria bicornis
+    |   +-Theileria velifera
+    |   +-Theileria orientalis
+    |   +-Theileria taurotragi
+    |   +-Theileria mutans
+    |   +-Theileria buffeli
+    |   +-Theileria parva
+    |   \-Theileria equi
+    \-Babesiidae
+      \-Babesia
+        +-Babesia vogeli
+        +-Babesia duncani
+        +-Babesia capreoli
+        +-Babesia motasi
+        +-Babesia sp. venatorum
+        +-Babesia leo
+        +-Babesia odocoilei
+        +-Babesia gibsoni
+        +-Babesia divergens
+        +-Babesia caballi
+        +-Babesia ovis
+        +-Babesia microti
+        +-Babesia canis
+        | \-Babesia canis rossi
+        +-Babesia bigemina
+        \-Babesia bovis
+-----------------------------------
+Bacteria
++-Bacillota
+| \-Bacilli
+|   \-Bacillales
+|     \-Listeriaceae
+|       \-Listeria
+|         \-Listeria monocytogenes
++-Pseudomonadota
+| +-Alphaproteobacteria
+| | +-Hyphomicrobiales
+| | | \-Bartonellaceae
+| | |   \-Bartonella
+| | |     +-Bartonella henselae
+| | |     \-Bartonella vinsonii
+| | \-Rickettsiales
+| |   +-Rickettsiaceae
+| |   | \-Rickettsia
+| |   |   +-Rickettsia philipii
+| |   |   +-Rickettsia asembonensis
+| |   |   +-Rickettsia felis
+| |   |   +-Rickettsia slovaca
+| |   |   +-Rickettsia sibirica
+| |   |   +-Rickettsia parkeri
+| |   |   +-Rickettsia massiliae
+| |   |   +-Rickettsia helvetica
+| |   |   +-Rickettsia africae
+| |   |   +-Rickettsia rhipicephali
+| |   |   +-Rickettsia bellii
+| |   |   +-Rickettsia amblyommatis
+| |   |   +-Rickettsia akari
+| |   |   +-Rickettsia rickettsii
+| |   |   \-Rickettsia conorii
+| |   \-Anaplasmataceae
+| |     +-Candidatus Neoehrlichia
+| |     | \-Neoehrlichia mikurensis
+| |     +-Ehrlichia
+| |     | +-Ehrlichia ovina
+| |     | +-Ehrlichia muris
+| |     | +-Ehrlichia ewingii
+| |     | +-Ehrlichia chaffeensis
+| |     | +-Ehrlichia canis
+| |     | \-Ehrlichia ruminantium
+| |     \-Anaplasma
+| |       +-Anaplasma capra
+| |       +-Anaplasma odocoilei
+| |       +-Anaplasma bovis
+| |       +-Anaplasma ovis
+| |       +-Anaplasma platys
+| |       +-Anaplasma phagocytophilum
+| |       +-Anaplasma marginale
+| |       \-Anaplasma centrale
+| \-Gammaproteobacteria
+|   +-Legionellales
+|   | \-Coxiellaceae
+|   |   \-Coxiella
+|   |     \-Coxiella burnetii
+|   \-Thiotrichales
+|     \-Francisellaceae
+|       \-Francisella
+|         \-Francisella tularensis
+\-Spirochaetota
+  \-Spirochaetia
+    \-Spirochaetales
+      \-Borreliaceae
+        +-Borrelia
+        | +-Borrelia miyamotoi
+        | +-Borrelia recurrentis
+        | +-Borrelia duttonii
+        | +-Borrelia lonestari
+        | +-Borrelia parkeri
+        | \-Borrelia hermsii
+        \-Borreliella
+          +-Borreliella mayonii
+          +-Borreliella garinii
+          +-Borreliella afzelii
+          \-Borreliella burgdorferi
+-----------------------------------

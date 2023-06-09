@@ -1,6 +1,6 @@
 [PATHS_req]
-BLAST = WWW
-ORGS = orgs
+BLAST = /home/stasiek/ncbi-blast-2.14.0+/bin
+DATABASE_PATH = local_database.fasta
 [PATHS_opt]
 TMHMM = ...
 SIGNALP = ...
