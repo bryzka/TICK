@@ -1,6 +1,7 @@
 # Import the necessary libraries
 import argparse
 import tkinter as tk
+from tkinter import filedialog
 
 import numpy as np
 from PIL import Image, ImageTk
@@ -47,14 +48,22 @@ min_hsp = (float('inf'), None)
 def run_blast():
     global min_hsp
     # Get the sequence from the entry box
-    sequence = seq_entry.get()
+    # sequence = seq_entry.get()
+    filename = filedialog.askopenfilename(initialdir="./",
+                                          title="Select a File",
+                                          filetypes=(("Seq files",
+                                                      "*.seq*"),
+                                                     ("fasta files",
+                                                      "*.fa*"),
+                                                     ("all files",
+                                                      "*.*")))
     # Run BLAST with the sequence
-    blast_record = blast_sequence(sequence)
+    blast_record = blast_sequence(filename)
     # Display results
     for alignment in blast_record.alignments:
         for hsp in alignment.hsps:
             if hsp.expect <= min_hsp[0]:
-                min_hsp = (hsp.expect, hsp)
+                min_hsp = (hsp.expect, hsp, alignment)
             results_text.insert(tk.END, f"****Alignment****\n")
             results_text.insert(tk.END, f"sequence: {alignment.title}\n")
             results_text.insert(tk.END, f"length: {alignment.length}\n")
@@ -62,6 +71,7 @@ def run_blast():
             results_text.insert(tk.END, hsp.query[0:75] + "...\n")
             results_text.insert(tk.END, hsp.match[0:75] + "...\n")
             results_text.insert(tk.END, hsp.sbjct[0:75] + "...\n")
+            titles_text.insert(tk.END, f"sequence: {alignment.title}\n")
 
 
 def _delta(x, y):
@@ -83,16 +93,23 @@ def plot():
     fig = Figure(figsize=(5, 5),
                  dpi=100)
     hsp = min_hsp[1]
+
     print(min_hsp)
+    win = win_entry.get()
+    if win:
+        win = int(win)
+    else:
+        win = 10
     if hsp:
         query = hsp.query
         sbjct = hsp.sbjct
 
         # list of squares
-        y = np.array(_makeMatrix(query, sbjct, 3))
+        y = np.array(_makeMatrix(query, sbjct, win))
         print(len(query), len(sbjct))
         # adding the subplot
         plot1 = fig.add_subplot(111)
+        fig.suptitle(min_hsp[2].title)
 
         # plotting the graph
         print(y)
@@ -123,10 +140,10 @@ mainframe = tk.Frame(Tick, bg='black', padx=10, pady=10)
 mainframe.grid(column=0, row=0, sticky=(tk.N, tk.W, tk.E, tk.S))
 
 # Create label and entry box for sequence input
-seq_label = tk.Label(mainframe, text="Enter sequence:", bg='white')
-seq_label.grid(column=0, row=1, sticky=tk.W)
-seq_entry = tk.Entry(mainframe, bg="white", width=50)
-seq_entry.grid(column=1, row=1, sticky=tk.E)
+# seq_label = tk.Label(mainframe, text="Enter sequence:", bg='white')
+# seq_label.grid(column=0, row=1, sticky=tk.W)
+# seq_entry = tk.Entry(mainframe, bg="white", width=50)
+# seq_entry.grid(column=1, row=1, sticky=tk.E)
 
 # Create "Run BLAST" button
 run_button = tk.Button(mainframe, text="Run BLAST", command=run_blast)
@@ -134,11 +151,21 @@ run_button.grid(column=0, row=3, columnspan=3)
 
 # Create "Plot" button
 run_button = tk.Button(mainframe, text="Dotplot", command=plot)
-run_button.grid(column=0, row=7, columnspan=3)
+run_button.grid(column=0, row=9, columnspan=1)
+win_label = tk.Label(mainframe, text="Enter dotplot window (default: 10):", bg='white')
+win_label.grid(column=1, row=9, sticky=tk.W)
+win_entry = tk.Entry(mainframe, bg="white", width=10)
+win_entry.grid(column=2, row=9, sticky=tk.E)
+
 
 # Create a text box for displaying BLAST results
-results_text = tk.Text(mainframe, height=10, width=50, bg="gray")
+results_text = tk.Text(mainframe, height=10, width=100, bg="gray")
 results_text.grid(column=0, row=5, columnspan=2)
+
+# Create a text box for displaying BLAST results titles
+titles_text = tk.Text(mainframe, height=10, width=100, bg="gray")
+titles_text.grid(column=0, row=7, columnspan=2)
+
 
 # Create a scrollbar for the text box
 scrollbar = tk.Scrollbar(mainframe, command=results_text.yview)
