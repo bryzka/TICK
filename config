@@ -1,5 +1,5 @@
 [PATHS_req]
-BLAST =
+BLAST = /home/stasiek/ncbi-blast-2.14.0+/bin
 DATABASE_PATH = data/local_database.fasta
 ORGS = list_of_pathogenes.txt
 [PATHS_opt]
