@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
     req, opt = config(args.config_file)
 
-    if req["BLAST"] in {'WWW', "", "NCBI"}:
+    if req["BLAST"]: # in {'WWW', "", "NCBI"}:
         blast = NCBIWWW
         blast.email = args.email
     else:
@@ -37,7 +37,7 @@ if __name__ == '__main__':
 
     orgs = get_orgs(req["orgs"])
     fasta = SeqIO.read(args.input_file, "fasta")
-    blast_ret = blast.qblast('blastn', 'nt', fasta, entrez_query=" OR ".join(orgs))
+    blast_ret = blast.qblast('blastn', 'nt', args.input_file, entrez_query=" OR ".join(orgs))
     blast_ret = NCBIXML.parse(blast_ret)
     for record in blast_ret:
         print("Record:")

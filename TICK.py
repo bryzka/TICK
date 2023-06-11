@@ -1,7 +1,7 @@
 # Import the necessary libraries
 import argparse
 import tkinter as tk
-from tkinter import filedialog
+from tkinter import filedialog, messagebox, simpledialog
 from typing import List
 
 import Bio
@@ -47,7 +47,9 @@ def get_orgs(path: str) -> List[str]:
 
 
 # Function to run BLAST on a given sequence against the local database
-def blast_sequence(sequence):
+def blast_sequence(sequence, start, end):
+    sequence = SeqIO.read(sequence, "fasta").seq[start: -end]
+    print(sequence)
     blastn_cline = NcbiblastnCommandline(cmd=paths['BLAST'] + '/blastn', query=sequence, db=DATABASE_PATH, outfmt=5,
                                          out="blast_results.xml")
     stdout, stderr = blastn_cline()
@@ -57,9 +59,10 @@ def blast_sequence(sequence):
 
 
 # Function to execute BLAST online
-def blast_online(fasta):
+def blast_online(fasta, start, end):
     orgs = get_orgs(paths['ORGS'])
-    fasta = SeqIO.read(fasta, "fasta").seq
+    fasta = SeqIO.read(fasta, "fasta").seq[start: -end]
+    print(fasta)
     blast_ret = NCBIWWW.qblast('blastn', 'nt', fasta, entrez_query="[organism] OR ".join(orgs))
     blast_ret = NCBIXML.parse(blast_ret)
     return blast_ret
@@ -71,23 +74,30 @@ min_hsp = (float('inf'), None)
 # Function to execute the BLAST run locally and display results
 def run_blast():
     global min_hsp
-    # Get the sequence from the entry box
-    # sequence = seq_entry.get()
+
     filename = filedialog.askopenfilename(initialdir="./",
                                           title="Select sequence which you wan to blast against database",
-                                          filetypes=(("Seq files",
-                                                      "*.seq*"),
-                                                     ("all files",
-                                                      "*.*"),
-                                                     ("fasta files",
-                                                      "*.fa*"),
+                                          filetypes=(
+                                              ("fasta files",
+                                               "*.fa*"),
+                                              ("Seq files",
+                                               "*.seq*"),
+                                              ("all files",
+                                               "*.*"),
                                                      ))
+
+    user_trim = messagebox.askyesno("Question", "Do you want to trim this sequence?")
+    start, end = 0, 1
+    if user_trim:
+        start = simpledialog.askinteger("Input", "How much to trim from the start:", parent=Tick)
+        end = simpledialog.askinteger("Input", "How much to trim from the end:", parent=Tick)
+
     # Run BLAST with the sequence
     try:
         if paths['BLAST'] not in {'WWW', ''}:
-            blast_record = blast_sequence(filename)
+            blast_record = blast_sequence(filename, start, end)
         else:
-            blast_record = blast_online(filename)
+            blast_record = blast_online(filename, start, end)
     except Bio.Application.ApplicationError:
         return 2
     # Display results
