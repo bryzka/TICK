@@ -3,6 +3,7 @@ import argparse
 import tkinter as tk
 from tkinter import filedialog, messagebox, simpledialog
 from typing import List
+import logging
 
 import Bio
 import numpy as np
@@ -17,9 +18,16 @@ from matplotlib.figure import Figure
 from config import config
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 
+logger = logging.getLogger()
+logger.setLevel(logging.WARN)
+console_handler = logging.StreamHandler()
+logger.addHandler(console_handler)
+
 parser = argparse.ArgumentParser()
 parser.add_argument('config', action='store', help='Path to the config file')
-parser.add_argument('--createdb', action='store_true', default=False, help='Whether the database should be created')
+parser.add_argument('--createdb', '-c', action='store_true', default=False,
+                    help='Whether the database should be created')
+parser.add_argument('--web', '-w', action='store_true', default=False, help='should the web blast be used')
 
 args = parser.parse_args()
 
@@ -48,11 +56,15 @@ def get_orgs(path: str) -> List[str]:
 
 # Function to run BLAST on a given sequence against the local database
 def blast_sequence(sequence, start, end):
-    sequence = SeqIO.read(sequence, "fasta").seq[start: -end]
-    print(sequence)
+    if start != 0 or end != 1:
+        sequ = SeqIO.read(sequence, "fasta")
+        logging.info(sequ)
+        sequ.seq = sequ.seq[start: -end]
+        SeqIO.write(sequ, sequence+'_trimmed', 'fasta')
     blastn_cline = NcbiblastnCommandline(cmd=paths['BLAST'] + '/blastn', query=sequence, db=DATABASE_PATH, outfmt=5,
                                          out="blast_results.xml")
     stdout, stderr = blastn_cline()
+    logging.error(stderr)
     result_handle = open("blast_results.xml")
     blast_record = NCBIXML.parse(result_handle)
     return blast_record
@@ -62,7 +74,7 @@ def blast_sequence(sequence, start, end):
 def blast_online(fasta, start, end):
     orgs = get_orgs(paths['ORGS'])
     fasta = SeqIO.read(fasta, "fasta").seq[start: -end]
-    print(fasta)
+    logging.info(fasta)
     blast_ret = NCBIWWW.qblast('blastn', 'nt', fasta, entrez_query="[organism] OR ".join(orgs))
     blast_ret = NCBIXML.parse(blast_ret)
     return blast_ret
@@ -94,14 +106,14 @@ def run_blast():
 
     # Run BLAST with the sequence
     try:
-        if paths['BLAST'] not in {'WWW', ''}:
+        if paths['BLAST'] not in {'WWW', ''} and not args.web:
             blast_record = blast_sequence(filename, start, end)
         else:
             blast_record = blast_online(filename, start, end)
     except Bio.Application.ApplicationError:
-        return 2
+        raise Bio.Application.ApplicationError('Error')
     # Display results
-    print(blast_record)
+    logging.info(blast_record)
     for record in blast_record:
         for alignment in record.alignments:
             for hsp in alignment.hsps:
@@ -140,7 +152,7 @@ def plot():
                  dpi=100)
     hsp = min_hsp[1]
 
-    print(min_hsp)
+    logging.info(min_hsp)
     win = win_entry.get()
     if win:
         win = int(win)
@@ -150,15 +162,15 @@ def plot():
         query = hsp.query
         sbjct = hsp.sbjct
 
-        # list of squares
+        # creating matrix
         y = np.array(_makeMatrix(query, sbjct, win))
-        print(len(query), len(sbjct))
+        logging.info(len(query), len(sbjct))
         # adding the subplot
         plot1 = fig.add_subplot(111)
         fig.suptitle(min_hsp[2].title)
 
         # plotting the graph
-        print(y)
+        logging.info(y)
         plot1.imshow(y)
 
     # creating the Tkinter canvas
@@ -175,7 +187,7 @@ def plot():
 Tick = tk.Tk()
 
 # Load an image and display it
-image1 = Image.open("TICK_logo.png")
+image1 = Image.open("TICK_logo.jpg")
 test = ImageTk.PhotoImage(image1)
 label1 = tk.Label(image=test)
 label1.image = test
@@ -184,12 +196,6 @@ label1.grid(row=0, column=1)
 # Create a frame within the window
 mainframe = tk.Frame(Tick, bg='black', padx=10, pady=10)
 mainframe.grid(column=0, row=0, sticky=(tk.N, tk.W, tk.E, tk.S))
-
-# Create label and entry box for sequence input
-# seq_label = tk.Label(mainframe, text="Enter sequence:", bg='white')
-# seq_label.grid(column=0, row=1, sticky=tk.W)
-# seq_entry = tk.Entry(mainframe, bg="white", width=50)
-# seq_entry.grid(column=1, row=1, sticky=tk.E)
 
 # Create "Run BLAST" button
 run_button = tk.Button(mainframe, text="Run BLAST", command=run_blast)
