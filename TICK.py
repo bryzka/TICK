@@ -2,11 +2,14 @@
 import argparse
 import tkinter as tk
 from tkinter import filedialog
+from typing import List
 
+import Bio
 import numpy as np
+from Bio import SeqIO
 from PIL import Image, ImageTk
 from Bio.Blast.Applications import NcbiblastnCommandline
-from Bio.Blast import NCBIXML
+from Bio.Blast import NCBIXML,NCBIWWW
 import subprocess
 
 from matplotlib.figure import Figure
@@ -32,47 +35,79 @@ if args.createdb:
 DATABASE_PATH = paths['DATABASE_PATH']
 
 
+def get_orgs(path: str) -> List[str]:
+    """
+    Gets lits of organisms to blast sequences against from a file
+    :param path: path to file containing list of organisms
+    :return: list of organisms
+    """
+    with open(path, 'r') as f:
+        ret = f.readlines()
+    return ret
+
+
 # Function to run BLAST on a given sequence against the local database
 def blast_sequence(sequence):
     blastn_cline = NcbiblastnCommandline(cmd=paths['BLAST'] + '/blastn', query=sequence, db=DATABASE_PATH, outfmt=5,
                                          out="blast_results.xml")
     stdout, stderr = blastn_cline()
     result_handle = open("blast_results.xml")
-    blast_record = NCBIXML.read(result_handle)
+    blast_record = NCBIXML.parse(result_handle)
     return blast_record
+
+
+# Function to execute BLAST online
+def blast_online(fasta):
+    orgs = get_orgs(paths['ORGS'])
+    fasta = SeqIO.read(fasta, "fasta").seq
+    blast_ret = NCBIWWW.qblast('blastn', 'nt', fasta, entrez_query="[organism] OR ".join(orgs))
+    blast_ret = NCBIXML.parse(blast_ret)
+    return blast_ret
 
 
 min_hsp = (float('inf'), None)
 
 
-# Function to execute the BLAST run and display results
+# Function to execute the BLAST run locally and display results
 def run_blast():
     global min_hsp
     # Get the sequence from the entry box
     # sequence = seq_entry.get()
     filename = filedialog.askopenfilename(initialdir="./",
-                                          title="Select a File",
+                                          title="Select sequence which you wan to blast against database",
                                           filetypes=(("Seq files",
                                                       "*.seq*"),
+                                                     ("all files",
+                                                      "*.*"),
                                                      ("fasta files",
                                                       "*.fa*"),
-                                                     ("all files",
-                                                      "*.*")))
+                                                     ))
     # Run BLAST with the sequence
-    blast_record = blast_sequence(filename)
+    try:
+        if paths['BLAST'] not in {'WWW', ''}:
+            blast_record = blast_sequence(filename)
+        else:
+            blast_record = blast_online(filename)
+    except Bio.Application.ApplicationError:
+        return 2
     # Display results
-    for alignment in blast_record.alignments:
-        for hsp in alignment.hsps:
-            if hsp.expect <= min_hsp[0]:
-                min_hsp = (hsp.expect, hsp, alignment)
-            results_text.insert(tk.END, f"****Alignment****\n")
-            results_text.insert(tk.END, f"sequence: {alignment.title}\n")
-            results_text.insert(tk.END, f"length: {alignment.length}\n")
-            results_text.insert(tk.END, f"e value: {hsp.expect}\n")
-            results_text.insert(tk.END, hsp.query[0:75] + "...\n")
-            results_text.insert(tk.END, hsp.match[0:75] + "...\n")
-            results_text.insert(tk.END, hsp.sbjct[0:75] + "...\n")
-            titles_text.insert(tk.END, f"sequence: {alignment.title}\n")
+    print(blast_record)
+    for record in blast_record:
+        for alignment in record.alignments:
+            for hsp in alignment.hsps:
+                if hsp.expect <= min_hsp[0]:
+                    min_hsp = (hsp.expect, hsp, alignment)
+                results_text.insert(tk.END, f"****Alignment****\n")
+                results_text.insert(tk.END, f"sequence: {alignment.title}\n")
+                results_text.insert(tk.END, f"length: {alignment.length}\n")
+                results_text.insert(tk.END, f"e value: {hsp.expect}\n")
+                results_text.insert(tk.END, hsp.query[0:75] + "...\n")
+                results_text.insert(tk.END, hsp.match[0:75] + "...\n")
+                results_text.insert(tk.END, hsp.sbjct[0:75] + "...\n")
+                titles_text.insert(tk.END, f"sequence: {alignment.title}\n")
+    else:
+        results_text.insert(tk.END, 'No more alignments')
+        titles_text.insert(tk.END, 'No more alignments')
 
 
 def _delta(x, y):
