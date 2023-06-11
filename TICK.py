@@ -15,12 +15,13 @@ from config import config
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 
 parser = argparse.ArgumentParser()
+parser.add_argument('config', action='store', help='Path to the config file')
 parser.add_argument('--createdb', action='store_true', default=False, help='Whether the database should be created')
 
 args = parser.parse_args()
 
 # Parse config file
-paths, opt = config('config')
+paths, opt = config(args.config)
 
 if args.createdb:
     # Run makeblastdb command to create a database for BLAST
