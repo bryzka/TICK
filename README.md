@@ -31,8 +31,8 @@ Here we present TICK pipeline:
 1. Clone this repository:
 
 ```sh
-git clone https://github.com/YOUR-USERNAME/BLAST-Runner.git
-cd BLAST-Runner
+git clone https://github.com/bryzka/TICK.git
+cd TICK
 ```
 
 2. Install the required Python libraries:
@@ -68,14 +68,17 @@ PFAM_db = ...
 
 To use TICK, run the TICK.py script through your command line or terminal. Below is the detailed explanation of the command:
 ```
-usage: TICK.py [-h] [--createdb] config
+usage: TICK.py [-h] [--createdb] [--web] config
 ```
 Positional Arguments:
 * config: This argument is used to specify the path to the configuration file that contains settings for TICK. The configuration file includes the paths to the BLAST binaries, the local database, and a list of tick pathogens.
+
 Optional Arguments:
 * -h, --help: Use this flag to display a help message that provides a brief overview of how the command should be used and a list of available arguments.
 
 * --createdb: This flag indicates whether a new database should be created for BLAST. This is useful if you are running the application for the first time.
+*  --web, -w       should the web blast be used
+
 
 Examples:
 To run the TICK tool with a configuration file and without creating a database:
