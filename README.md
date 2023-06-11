@@ -76,8 +76,8 @@ Positional Arguments:
 Optional Arguments:
 * -h, --help: Use this flag to display a help message that provides a brief overview of how the command should be used and a list of available arguments.
 
-* --createdb Run this flag if you want the application to create a BLAST database before running.
-*  --web, -w Run this flag if you want to use the online version of BLAST instead of a local installation.
+* --createdb: Run this flag if you want the application to create a BLAST database before running.
+*  --web, -w: Run this flag if you want to use the online version of BLAST instead of a local installation.
 
 Examples:
 To run the TICK tool with a configuration file and without creating a database:
