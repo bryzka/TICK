@@ -58,6 +58,6 @@ options:
   --createdb  Whether the database should be created
 
 ```
-
+TICK starts Tkinter GUI with which you can use its functionalities. 
 # Members
 Julia Byrska, Stanisław Janik
