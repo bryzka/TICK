@@ -1,4 +1,4 @@
-Bacteria: 
+
 Anaplasma bovis
 Anaplasma capra
 Anaplasma centrale
@@ -48,7 +48,6 @@ Rickettsia sibirica
 Rickettsia slovaca
 Rickettsia species 364D
 
-Viruses:
 African swine fever virus(ASFV)
 Alongshan virus
 Bhanja virus
@@ -69,7 +68,6 @@ Thogoto virus (THOV)
 Tick-borne encephalitis virus (TBEV) 
 Uukuniemi virus (UUKV)
 
-Parasites:
 Babesia bigemina
 Babesia bovis
 Babesia caballi
