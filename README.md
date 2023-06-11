@@ -1,13 +1,17 @@
 # TICK
 This project is a "TICK" - a tool for analysis tick-borne pathogenes sequences. It is a GUI-based application to run BLAST (Basic Local Alignment Search Tool) in order to align possible tick-borne pathogenes' sequences to records from our self-created local database or online database limited to the pathogens we have indicated. It has additional features like sequence trimming, displaying BLAST results, and creating dot plots for alignment comparisons. This tool is designed for researchers and laboratory technicians who are working with tick pathogen sequences. This is our project for the "Architecture of large projects in bioinformatics" course.
 
+Here we present TICK pipeline:
+
+![](TICK_pipeline.jpg)
+
+
 ## Table of Contents
 
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Usage](#usage)
-- [Contributing](#contributing)
 - [License](#license)
 - [Acknowledgements](#acknowledgements)
 - [Team](#team)
