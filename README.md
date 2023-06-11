@@ -76,9 +76,8 @@ Positional Arguments:
 Optional Arguments:
 * -h, --help: Use this flag to display a help message that provides a brief overview of how the command should be used and a list of available arguments.
 
-* --createdb: This flag indicates whether a new database should be created for BLAST. This is useful if you are running the application for the first time.
-*  --web, -w       should the web blast be used
-
+* --createdb Run this flag if you want the application to create a BLAST database before running.
+*  --web, -w Run this flag if you want to use the online version of BLAST instead of a local installation.
 
 Examples:
 To run the TICK tool with a configuration file and without creating a database:
@@ -105,7 +104,7 @@ This project is licensed under the terms of the MIT license.
 
 ## Acknowledgements
 
-Thanks to the open-source community and prof. dr hab. Anna Bajer for providing some example sequences and making this project possible.
+Thanks to the The National Center for Biotechnology Information (NCBI) for BLAST, The BioPython community for providing libraries, open-source community and prof. dr hab. Anna Bajer for providing some example sequences and making this project possible.
 
 # Team
 Julia Byrska, Stanisław Janik
