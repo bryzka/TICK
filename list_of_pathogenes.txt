@@ -69,7 +69,7 @@ Thogoto virus (THOV)
 Tick-borne encephalitis virus (TBEV) 
 Uukuniemi virus (UUKV)
 
-Parasites:
+Protozoa:
 Babesia bigemina
 Babesia bovis
 Babesia caballi
