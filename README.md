@@ -31,7 +31,7 @@ if NCBI blast is to be used), and path to file containing sequences of ticks pat
 Optional are paths to tools that are yet to be added to function, or the ones already added, but optional. 
 
 Usage of the demo is as follows( full version's basic usage should be similar):
-```python
+```bash
 usage: demo.py [-h] [--config_file CONFIG_FILE] [--email EMAIL] input_file
 
 positional arguments:
@@ -46,6 +46,18 @@ options:
 
 ```
 
+Usage of the TICK.py is as follows:
+```bash
+usage: TICK.py [-h] [--createdb] config
+
+positional arguments:
+  config      Path to the config file
+
+options:
+  -h, --help  show this help message and exit
+  --createdb  Whether the database should be created
+
+```
 
 # Members
 Julia Byrska, Stanisław Janik
