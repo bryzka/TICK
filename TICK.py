@@ -1,20 +1,19 @@
 # Import the necessary libraries
 import argparse
 import tkinter as tk
-from tkinter import filedialog, messagebox, simpledialog
+from tkinter import filedialog, messagebox, simpledialog, ttk
 from typing import List
 import logging
-
 import Bio
+import time
+import threading
 import numpy as np
 from Bio import SeqIO
 from PIL import Image, ImageTk
 from Bio.Blast.Applications import NcbiblastnCommandline
 from Bio.Blast import NCBIXML,NCBIWWW
 import subprocess
-
 from matplotlib.figure import Figure
-
 from config import config
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 
@@ -82,13 +81,19 @@ def blast_online(fasta, start, end):
 
 min_hsp = (float('inf'), None)
 
+def progress_bar():
+    progress = ttk.Progressbar(mainframe, orient="horizontal", length=300, mode="indeterminate")
+    progress.grid(column=0, row=4, columnspan=3)
+    progress.start()
+    time.sleep(5)
+    progress.stop()
 
 # Function to execute the BLAST run locally and display results
 def run_blast():
     global min_hsp
 
     filename = filedialog.askopenfilename(initialdir="./",
-                                          title="Select sequence which you wan to blast against database",
+                                          title="Select sequence which you want to blast against database",
                                           filetypes=(
                                               ("fasta files",
                                                "*.fa*"),
@@ -103,6 +108,9 @@ def run_blast():
     if user_trim:
         start = simpledialog.askinteger("Input", "How much to trim from the start:", parent=Tick)
         end = simpledialog.askinteger("Input", "How much to trim from the end:", parent=Tick)
+
+    progress_thread = threading.Thread(target=progress_bar)
+    progress_thread.start()
 
     # Run BLAST with the sequence
     try:
@@ -183,45 +191,59 @@ def plot():
     canvas.get_tk_widget().grid(column=1, row=0)
 
 
+# ... pozostały kod ...
+
 # Create a Tkinter window
 Tick = tk.Tk()
+Tick.title("TICK")  
+Tick.geometry("1200x700") 
+Tick.configure(bg="lightgray") 
+
+icon_image = ImageTk.PhotoImage(file="TICK_logo.jpg") 
+Tick.iconphoto(False, icon_image)
 
 # Load an image and display it
-image1 = Image.open("TICK_logo.jpg")
+image1 = Image.open("TICK_logo.jpg").resize((200, 200))  
 test = ImageTk.PhotoImage(image1)
-label1 = tk.Label(image=test)
-label1.image = test
-label1.grid(row=0, column=1)
+label1 = tk.Label(image=test, bg="lightgray")
+label1.grid(row=0, column=2, padx=20, pady=20)
+
+# Custom styles for widgets
+style = ttk.Style()
+style.configure("TButton", font=("Arial", 12), padding=10)
+style.configure("TLabel", font=("Arial", 12))
+style.configure("TEntry", font=("Arial", 12))
 
 # Create a frame within the window
-mainframe = tk.Frame(Tick, bg='black', padx=10, pady=10)
+mainframe = ttk.Frame(Tick, padding="20 20 20 20")
 mainframe.grid(column=0, row=0, sticky=(tk.N, tk.W, tk.E, tk.S))
 
 # Create "Run BLAST" button
-run_button = tk.Button(mainframe, text="Run BLAST", command=run_blast)
-run_button.grid(column=0, row=3, columnspan=3)
+run_button = ttk.Button(mainframe, text="Select sequence to run BLAST", command=run_blast)
+run_button.grid(column=0, row=3, columnspan=3, pady=10)
 
 # Create "Plot" button
-run_button = tk.Button(mainframe, text="Dotplot", command=plot)
-run_button.grid(column=0, row=9, columnspan=1)
-win_label = tk.Label(mainframe, text="Enter dotplot window (default: 10):", bg='white')
-win_label.grid(column=1, row=9, sticky=tk.W)
-win_entry = tk.Entry(mainframe, bg="white", width=10)
-win_entry.grid(column=2, row=9, sticky=tk.E)
+plot_button = ttk.Button(mainframe, text="Dotplot", command=plot)
+plot_button.grid(column=0, row=9, columnspan=1, pady=10)
+
+# Window label and entry for dotplot
+win_label = ttk.Label(mainframe, text="Enter dotplot window (default: 10):")
+win_label.grid(column=1, row=9, sticky=tk.E, padx=10)  
+win_entry = ttk.Entry(mainframe, width=10, font=("Arial", 12))
+win_entry.grid(column=2, row=9, sticky=tk.W, padx=10)  
 
 
 # Create a text box for displaying BLAST results
-results_text = tk.Text(mainframe, height=10, width=100, bg="gray")
-results_text.grid(column=0, row=5, columnspan=2)
+results_text = tk.Text(mainframe, height=10, width=100, bg="white", padx=10, pady=10, borderwidth=2, relief="groove")
+results_text.grid(column=0, row=5, columnspan=3, pady=10)
 
 # Create a text box for displaying BLAST results titles
-titles_text = tk.Text(mainframe, height=10, width=100, bg="gray")
-titles_text.grid(column=0, row=7, columnspan=2)
-
+titles_text = tk.Text(mainframe, height=10, width=100, bg="white", padx=10, pady=10, borderwidth=2, relief="groove")
+titles_text.grid(column=0, row=7, columnspan=3, pady=10)
 
 # Create a scrollbar for the text box
-scrollbar = tk.Scrollbar(mainframe, command=results_text.yview)
-scrollbar.grid(row=5, column=2, sticky='nsew')
+scrollbar = ttk.Scrollbar(mainframe, command=results_text.yview)
+scrollbar.grid(row=5, column=3, sticky='nsew')
 results_text['yscrollcommand'] = scrollbar.set
 
 # Start the Tkinter event loop
